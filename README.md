@@ -123,7 +123,7 @@ pip install -r requirements.txt
 
 Download OSGeo4W (64-bit):
 
-https://download.osgeo.org/osgeo4w/v2/osgeo4w-setup-x86_64.exe
+https://download.osgeo.org/osgeo4w/v2/osgeo4w-setup.exe
 
 Install packages:
 
