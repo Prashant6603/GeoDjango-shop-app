@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+
+                <h3 class="text-center mb-3">Create Account</h3>
+
+                {% if form.errors %}
+                    <div class="alert alert-danger text-center">
+                        Please fix the errors below.
+                    </div>
+                {% endif %}
+
+                <form method="POST" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Username -->
+                    <div class="mb-3">
+                        {{ form.username.label_tag }}
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <small class="text-danger">{{ form.username.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <small class="text-danger">{{ form.email.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-3">
+                        {{ form.password1.label_tag }}
+                        {{ form.password1 }}
+                        {% if form.password1.errors %}
+                            <small class="text-danger">{{ form.password1.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="mb-3">
+                        {{ form.password2.label_tag }}
+                        {{ form.password2 }}
+                        {% if form.password2.errors %}
+                            <small class="text-danger">{{ form.password2.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+
+                    <button class="btn btn-success w-100">Sign Up</button>
+                </form>
+
+                <hr class="my-4">
+
+                <p class="text-center">
+                    Already have an account?
+                    <a href="{% url 'login' %}">Login here</a>
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

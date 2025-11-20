@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3 class="mb-3">Shop Dashboard</h3>
+
+<form method="GET" class="row g-3 mb-3" id="searchForm">
+
+    <div class="col-md-4">
+        <input type="text" class="form-control"
+               name="q"
+               placeholder="Search by name or address"
+               value="{{ request.GET.q }}">
+    </div>
+
+    <div class="col-md-3">
+        <input type="text" class="form-control"
+               name="category"
+               placeholder="Category"
+               value="{{ request.GET.category }}">
+    </div>
+
+    <div class="col-md-2">
+        <button class="btn btn-primary w-100">Search</button>
+    </div>
+
+    {% if user.is_authenticated %}
+    <div class="col-md-3 d-flex align-items-center">
+
+        <div class="form-check form-switch">
+            <input class="form-check-input"
+                   type="checkbox"
+                   id="toggleAll"
+                   name="all"
+                   value="1"
+                   {% if request.GET.all %}checked{% endif %}>
+            <label class="form-check-label" for="toggleAll">Show All Shops</label>
+        </div>
+
+    </div>
+    {% endif %}
+
+</form>
+
+<!-- MAP -->
+<div id="map" style="height: 600px; border: 1px solid #ccc;"></div>
+
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Auto-refresh on toggle change
+    const toggle = document.getElementById('toggleAll');
+    if (toggle) {
+        toggle.addEventListener('change', () => {
+            document.getElementById('searchForm').submit();
+        });
+    }
+
+    // Initialize map
+    const map = L.map('map').setView([20.5937, 78.9629], 6);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+    }).addTo(map);
+
+    // OPTIONAL: Marker Cluster group (uncomment if needed)
+    // const markers = L.markerClusterGroup();
+
+    // Add all shop markers
+    {% for shop in shops %}
+        {% if shop.location %}
+            const marker = L.marker([{{ shop.location.y }}, {{ shop.location.x }}])
+                .bindPopup(`
+                    <b>{{ shop.name }}</b><br>
+                    {{ shop.address }}<br>
+                    <span class="text-muted">{{ shop.category }}</span>
+                `);
+
+            marker.addTo(map);
+            // markers.addLayer(marker);
+        {% endif %}
+    {% endfor %}
+
+    // If using clusters:
+    // map.addLayer(markers);
+
+});
+</script>
+{% endblock %}
+
+{% endblock %}

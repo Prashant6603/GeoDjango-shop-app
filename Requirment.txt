@@ -1,0 +1,13 @@
+Django==5.2.8
+psycopg2==2.9.9
+crispy-forms==1.14.0
+django-crispy-forms==2.1
+
+# GeoDjango dependencies through pip
+pyproj
+proj
+shapely
+sqlparse
+
+pytz
+asgiref

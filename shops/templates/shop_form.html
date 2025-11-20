@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>Add / Update Shop</h3>
+
+<form method="POST" class="mt-3">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        {{ form.name.label_tag }}
+        {{ form.name }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.address.label_tag }}
+        {{ form.address }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.category.label_tag }}
+        {{ form.category }}
+    </div>
+
+    <!-- Hidden coordinate fields -->
+    {{ form.latitude }}
+    {{ form.longitude }}
+
+    <label class="fw-bold mt-3">Click on map to select location:</label>
+
+    <div id="map" style="height: 400px; border: 1px solid #ccc;"></div>
+
+    <button class="btn btn-success mt-3">Save Shop</button>
+</form>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var map = L.map('map').setView([20.5937, 78.9629], 5); // Center: India
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+    }).addTo(map);
+
+    var marker = null;
+
+    // Editing existing shop → load previous coordinates
+    {% if form.initial.latitude %}
+        var oldLat = {{ form.initial.latitude }};
+        var oldLng = {{ form.initial.longitude }};
+        marker = L.marker([oldLat, oldLng]).addTo(map);
+        map.setView([oldLat, oldLng], 14);
+    {% endif %}
+
+    // User clicks on map → place marker + set hidden fields
+    map.on("click", function (e) {
+        var lat = e.latlng.lat.toFixed(6);
+        var lng = e.latlng.lng.toFixed(6);
+
+        document.getElementById("id_latitude").value = lat;
+        document.getElementById("id_longitude").value = lng;
+
+        if (marker) {
+            marker.setLatLng([lat, lng]);
+        } else {
+            marker = L.marker([lat, lng]).addTo(map);
+        }
+    });
+});
+</script>
+
+{% endblock %}
