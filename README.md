@@ -1,117 +1,129 @@
-# GeoShop Locator (Django + GeoDjango + PostGIS)
+GeoShop Locator (Django + GeoDjango + PostGIS)
 
-A geospatial web application built using **Django**, **GeoDjango**, **Leaflet**, and **PostGIS** that allows users to:
+A geospatial web application built using Django, GeoDjango, Leaflet, and PostGIS that allows users to:
 
-- Create an account and log in  
-- Add shops using an interactive map  
-- Save shop coordinates as a **PostGIS Point geometry**  
-- View, update, and delete their own shops  
-- Display all shops on a Leaflet map  
-- Filter shops by name, address, and category  
+Create an account and log in
 
----
+Add shops using an interactive map
 
-## 🚀 Features
+Save shop coordinates as a PostGIS Point geometry
 
-### 🗺️ GeoDjango + PostGIS
-- Each shop's location is stored as a **PointField** in PostGIS.
-- Coordinates are captured by Leaflet and automatically converted into `Point(lon, lat, srid=4326)`.
+View, update, and delete their own shops
 
-### 👤 User Authentication
-- Custom login, signup, and logout system.
-- Logged-in users can only manage (update/delete) their own shops.
+Display all shops on a Leaflet map
 
-### 🏪 Shop Management
-- Add shop with name, address, category, and map location.
-- CRUD operations: Create, Read, Update, Delete.
-- “View Shops” table with coordinates (longitude, latitude).
+Filter shops by name, address, and category
 
-### 🗂️ Dashboard with Search
-- Filter by:
-  - Shop name  
-  - Address  
-  - Category  
-- Option to “Show All Shops”.
+🚀 Features
+🗺️ GeoDjango + PostGIS
 
----
+Each shop's location stored as a PointField.
 
-## 🏗️ Tech Stack
+Coordinates captured via Leaflet map click.
 
-**Backend**
-- Django 5.2.x  
-- GeoDjango  
-- PostgreSQL + PostGIS  
-- GDAL / GEOS / PROJ (OSGeo4W on Windows)  
+Automatically converted to:
+Point(lon, lat, srid=4326)
 
-**Frontend**
-- Leaflet.js  
-- Bootstrap 5  
-- JavaScript for map interaction  
+👤 User Authentication
 
----
+Custom login, signup, and logout.
 
-## 📁 Project Structure
+Only logged-in users can manage their own shops.
 
+🏪 Shop Management
+
+Add shop: name, address, category, map location
+
+CRUD operations
+
+“View Shops” table with lat–lon coordinates
+
+🗂️ Dashboard with Search Filters
+
+Search by:
+
+Shop name
+
+Address
+
+Category
+
+Option to Show All Shops
+
+🏗️ Tech Stack
+Backend
+
+Django 5.2.x
+
+GeoDjango
+
+PostgreSQL + PostGIS
+
+GDAL / GEOS / PROJ (via OSGeo4W)
+
+Frontend
+
+Leaflet.js
+
+Bootstrap 5
+
+Custom JavaScript for map events
+
+📁 Project Structure
 geomap_stores/
 │── geomap_stores/
-│ ├── settings.py
-│ ├── urls.py
-│ ├── wsgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│
 │── shops/
-│ ├── migrations/
-│ ├── templates/
-│ │ ├── base.html
-│ │ ├── dashboard.html
-│ │ ├── shop_form.html
-│ │ ├── view_shop.html
-│ │ ├── login.html
-│ │ ├── sign_up.html
-│ ├── models.py
-│ ├── forms.py
-│ ├── views.py
-│ ├── urls.py
+│   ├── migrations/
+│   ├── templates/
+│   │   ├── base.html
+│   │   ├── dashboard.html
+│   │   ├── shop_form.html
+│   │   ├── view_shop.html
+│   │   ├── login.html
+│   │   ├── sign_up.html
+│   ├── models.py
+│   ├── forms.py
+│   ├── views.py
+│   ├── urls.py
+│
 │── static/
 │── manage.py
 │── requirements.txt
 │── README.md
 
-yaml
-Copy code
+🛠️ Installation Instructions (Windows)
+1️⃣ Clone Repo & Create Virtual Environment
+git clone https://github.com/Prashant6603/GeoDjango-shop-app.git
+cd GeoDjango-shop-app
 
----
-
-# 🛠️ Installation Instructions (Windows)
-
-### 1️⃣ Clone Repo & Create Virtual Environment
-git clone <your-repo-url>
-cd geomap_stores
 python -m venv venv
 venv\Scripts\activate
 
-shell
-Copy code
-
-### 2️⃣ Install Dependencies
+2️⃣ Install Dependencies
 pip install -r requirements.txt
 
-shell
-Copy code
+3️⃣ Install & Configure OSGeo4W (Required for GDAL/GEOS)
 
-### 3️⃣ Install & Configure OSGeo4W  
 Download OSGeo4W (64-bit):
 
 https://download.osgeo.org/osgeo4w/v2/osgeo4w-setup-x86_64.exe
 
-markdown
-Copy code
 
 Install packages:
-- **gdal**
-- **geos**
-- **proj**
 
-### 4️⃣ Configure GeoDjango (in settings.py)
-Make sure these paths are added at the top of settings:
+gdal
+
+geos
+
+proj
+
+4️⃣ Configure GeoDjango in settings.py
+
+Add at the TOP of your settings.py:
 
 OSGEO4W = r"C:\OSGeo4W"
 os.environ["OSGEO4W_ROOT"] = OSGEO4W
@@ -122,30 +134,26 @@ os.environ["PATH"] = fr"{OSGEO4W}\bin;" + os.environ["PATH"]
 GEOS_LIBRARY_PATH = r"C:\OSGeo4W\bin\geos_c.dll"
 GDAL_LIBRARY_PATH = r"C:\OSGeo4W\bin\gdal311.dll"
 
-r
-Copy code
+5️⃣ Configure PostGIS Database
 
-### 5️⃣ Configure PostGIS Database
 In PostgreSQL:
 
-```sql
 CREATE DATABASE geomap_stores_db;
 \c geomap_stores_db
 CREATE EXTENSION postgis;
-Make sure settings.py matches your credentials.
+
+
+Make sure database credentials match your settings.py.
 
 🔧 Run Migrations
-nginx
-Copy code
 python manage.py makemigrations
 python manage.py migrate
 python manage.py createsuperuser
+
 ▶️ Run Development Server
-nginx
-Copy code
 python manage.py runserver
+
+
 Open browser:
 
-cpp
-Copy code
 http://127.0.0.1:8000/
